@@ -5,12 +5,23 @@ plugins {
 
 android {
     namespace 'com.example.testproject'
-    compileSdk 33
+    compileSdk 34
+
+    buildscript {
+        repositories {
+            google()
+            jcenter()
+        }
+        dependencies {
+            classpath "com.android.tools.build:gradle:7.3.1"
+        }
+    }
+
 
     defaultConfig {
         applicationId "com.example.testproject"
         minSdk 33
-        targetSdk 33
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 

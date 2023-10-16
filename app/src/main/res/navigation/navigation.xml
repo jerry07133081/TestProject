@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/fristFragment"
-        android:name="com.example.testproject.FristFragment"
+        android:name="com.example.testproject.controller.FristFragment"
         android:label="fragment_frist"
         tools:layout="@layout/fragment_frist" />
 </navigation>
