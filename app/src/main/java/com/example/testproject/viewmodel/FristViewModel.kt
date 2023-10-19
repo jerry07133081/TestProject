@@ -35,6 +35,7 @@ class FristViewModel : ViewModel() {
 
     /** 模擬取得遠端資料 */
     private fun loadFriends() {
+        println("資料輸入...")
         val friendList = mutableListOf<MyItem>()
         friendList.add(MyItem(R.drawable.camper, "龜狗", "091234342"))
         friendList.add(MyItem(R.drawable.gudon, "國動", "090893473"))

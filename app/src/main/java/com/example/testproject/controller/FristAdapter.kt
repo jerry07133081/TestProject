@@ -78,18 +78,21 @@ package com.example.testproject.controller
 //}
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testproject.databinding.FragmentFristItemBinding // 更改為您的正確包名
 import com.example.testproject.model.MyItem
+import com.example.testproject.viewmodel.FristsViewModel
 import java.util.Collections
 
 class FristAdapter(private var items: MutableList<MyItem>) :
     RecyclerView.Adapter<FristAdapter.FristViewHolder>() {
 
     // 更新數據的方法
-    fun updateItems(newItems: MyItem) {
+    fun updateItems(newItems: MutableList<MyItem>) {
         items.clear()
-        items.addAll(listOf(newItems))
+        items.addAll(newItems)
+
         notifyDataSetChanged()
     }
 
@@ -107,24 +110,41 @@ class FristAdapter(private var items: MutableList<MyItem>) :
         notifyItemMoved(fromPosition, toPosition)
     }
 
-    override fun getItemCount(): Int = items.size
+    class FristViewHolder(val itemViewBinding: FragmentFristItemBinding) :
+        RecyclerView.ViewHolder(itemViewBinding.root)
+
+    override fun getItemCount(): Int {
+        return items.size
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FristViewHolder {
-        val binding = FragmentFristItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = FragmentFristItemBinding.inflate(
+            LayoutInflater.from(parent.context), parent, false
+        )
+        println("2")
+        binding.viewModel = FristsViewModel()
+        binding.lifecycleOwner = parent.findViewTreeLifecycleOwner()
         return FristViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: FristViewHolder, position: Int) {
+        println("3")
         val item = items[position]
-        holder.bind(item)
-    }
-
-    inner class FristViewHolder(private val binding: FragmentFristItemBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(item: MyItem) {
-            binding.viewModel = item // 假設您的數據綁定變量名為 item
-            binding.executePendingBindings()
+        with(holder) {
+            // 將欲顯示的friend物件指派給LiveData，就會自動更新layout檔案的view顯示
+            itemViewBinding.viewModel?.item?.value = item
+//        holder.bind(item)
         }
     }
 }
+
+//    inner class FristViewHolder(private val binding: FragmentFristItemBinding) :
+//        RecyclerView.ViewHolder(binding.root) {
+//
+//        fun bind(item: MyItem) {
+//            binding.viewModel?.item?.value = item // 假設您的數據綁定變量名為 item
+//            println("資料" + item)
+//            binding.executePendingBindings()
+//        }
+//    }
+
